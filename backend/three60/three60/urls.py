@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from social.views import GoogleLogin
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
     path('accounts/', include('allauth.urls')),
+    path('auth/', include('dj_rest_auth.urls')),
+    path('google/', GoogleLogin.as_view(), name='google-login'),
     path("api/auth/", include('authentication.urls')),
+
 ]
