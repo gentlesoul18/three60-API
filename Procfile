@@ -1,1 +1,1 @@
-web: gunicorn three60.wsgi
+web: gunicorn three60.wsgi --log-file -
