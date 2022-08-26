@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -114,9 +114,9 @@ AUTH_USER_MODEL = 'authentication.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['USER'],
+        'NAME': config('USER'),
         'USER': 'postgres',
-        'PASSWORD': os.environ['PASSWORD'],
+        'PASSWORD': config('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432', 
     }
@@ -178,9 +178,9 @@ STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
-GMAIL_API_CLIENT_ID = os.environ["GMAIL_API_CLIENT_ID"]
-GMAIL_API_CLIENT_SECRET = os.environ["GMAIL_API_CLIENT_SECRET"]
-GMAIL_API_REFRESH_TOKEN = os.environ["GMAIL_API_REFRESH_TOKEN"]
+GMAIL_API_CLIENT_ID = config("GMAIL_API_CLIENT_ID")
+GMAIL_API_CLIENT_SECRET = config("GMAIL_API_CLIENT_SECRET")
+GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
 
 
 SOCIALACCOUNT_PROVIDERS = {
