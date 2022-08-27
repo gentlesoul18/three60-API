@@ -1,17 +1,18 @@
 
 from operator import sub
+from typing import Generic
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.urls import reverse
 
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, UserSerializer
 from .models import User
 from .utils import send_mail
 
@@ -19,8 +20,11 @@ import jwt
 
 # Create your views here.
 
-class RegisterView(APIView):
+class RegisterView(GenericAPIView):
+    serializer_class = RegisterSerializer
+
     def post(self, request):
+        
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -43,7 +47,7 @@ class RegisterView(APIView):
         return Response({'data':user_data, 'success':'verification link have been sent to your email'}, status= status.HTTP_201_CREATED)
 
 
-class VerifyEmailView(APIView):
+class VerifyEmailView(GenericAPIView):
     def get(self, request):
         token =request.GET.get('token')
 
@@ -67,6 +71,7 @@ class VerifyEmailView(APIView):
             )
             
 
-class LoginView(APIView):
+class LoginView(GenericAPIView):
+    serializer_class = UserSerializer
     def post(self, request):
         pass
