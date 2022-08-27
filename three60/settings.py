@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "gmailapi_backend",
+    "drf_yasg",
     #all_auth apps
     'allauth',
     'allauth.account',
