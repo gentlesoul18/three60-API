@@ -1,12 +1,10 @@
-
-from operator import sub
-from typing import Generic
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.urls import reverse
 
 from rest_framework.generics import GenericAPIView
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -16,7 +14,7 @@ from .serializers import RegisterSerializer, UserSerializer
 from .models import User
 from .utils import send_mail
 
-import jwt
+import jwt,datetime
 
 # Create your views here.
 
@@ -74,4 +72,28 @@ class VerifyEmailView(GenericAPIView):
 class LoginView(GenericAPIView):
     serializer_class = UserSerializer
     def post(self, request):
-        pass
+        username = request.data['username']
+        password = request.data['password']
+
+        user = User.objects.get(username=username)
+
+        if user is None:
+            raise AuthenticationFailed('User not found!')
+
+        if not user.check_password(password):
+            raise AuthenticationFailed('Incorrect Password!')
+
+        # payload = {
+        #     "id": user.id,
+        #     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24),
+        #     "iat": datetime.datetime.utcnow(),
+        # }
+
+        #token = jwt.encode(payload, "secret", algorithm="HS256") # generates access token for login
+        serializer = UserSerializer(user)
+
+        response = Response()
+
+        # response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
+        response.data = {"tokens": user.tokens(), "data":serializer.data}
+        return response

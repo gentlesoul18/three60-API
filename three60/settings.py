@@ -60,9 +60,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
     #Local apps
-    "authentication"
+    "authentication",
+    "social"
 ]
 
 MIDDLEWARE = [
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "three60.urls"
@@ -110,7 +114,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     #to login with username or email
-    'backendauthenticate.EmailorUsernameAuthenticationBackend'
+    'authentication.backends.UsernameOrEmailBackend',
+    #'backends.EmailorUsernameAuthenticationBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -180,11 +185,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "dj_rest_auth.utils.JWTCookieAuthentication",
+    ),
 }
 
+REST_USE_JWT = True
 
 STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 
@@ -210,7 +219,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 django_heroku.settings(locals())
