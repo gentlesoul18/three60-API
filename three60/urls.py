@@ -15,9 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< HEAD:backend/three60/three60/urls.py
-from social.views import GoogleLogin
-=======
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
@@ -30,22 +27,13 @@ schema_view = get_schema_view(
     ),
     public=True,
 )
->>>>>>> e5b7de43d72a1ced4ba3379ee740d2644940ff31:three60/urls.py
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-<<<<<<< HEAD:backend/three60/three60/urls.py
-
-    path('accounts/', include('allauth.urls')),
-    path('auth/', include('dj_rest_auth.urls')),
-    path('google/', GoogleLogin.as_view(), name='google-login'),
-=======
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    #path('accounts/', include('allauth.urls')),
     path('auth/', include('dj_rest_auth.urls')),
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),
     path('social/', include('social.urls')),
->>>>>>> e5b7de43d72a1ced4ba3379ee740d2644940ff31:three60/urls.py
-    path("api/auth/", include('authentication.urls')),
 
 ]

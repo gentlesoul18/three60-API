@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 import django_heroku
 import dj_database_url
 from decouple import config
@@ -115,7 +116,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     #to login with username or email
-    'authentication.backends.UsernameOrEmailBackend',
+    #'authentication.backends.UsernameOrEmailBackend',
     #'backends.EmailorUsernameAuthenticationBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
@@ -205,6 +206,34 @@ EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
 GMAIL_API_CLIENT_ID = config("GMAIL_API_CLIENT_ID")
 GMAIL_API_CLIENT_SECRET = config("GMAIL_API_CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
 
 
 SOCIALACCOUNT_PROVIDERS = {
