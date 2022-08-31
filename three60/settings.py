@@ -35,7 +35,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'https://three60-api.herokuapp.com']
-SITE_ID = 1
+SITE_ID = 2
 
 
 # Application definition
@@ -66,8 +66,6 @@ INSTALLED_APPS = [
 
     #Local apps
     "authentication",
-    "social",
-    "api",
 ]
 
 MIDDLEWARE = [
@@ -204,8 +202,8 @@ STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
-GMAIL_API_CLIENT_ID = config("GMAIL_API_CLIENT_ID")
-GMAIL_API_CLIENT_SECRET = config("GMAIL_API_CLIENT_SECRET")
+GMAIL_API_CLIENT_ID = config("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
 
 SIMPLE_JWT = {
