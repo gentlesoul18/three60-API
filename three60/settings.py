@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 import django_heroku
 import dj_database_url
 from decouple import config
@@ -34,7 +35,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'https://three60-api.herokuapp.com']
-SITE_ID = 1
+SITE_ID = 2
 
 
 # Application definition
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "gmailapi_backend",
     "drf_yasg",
+
     #all_auth apps
     'allauth',
     'allauth.account',
@@ -61,12 +63,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
 
     #Local apps
     "authentication",
-    "social"
 ]
 
 MIDDLEWARE = [
@@ -106,7 +105,7 @@ SWAGGER_SETTINGS = {
             'type':'apiKey',
             'name':'Authorization',
             'in':'header'
-        }
+        },
     }
 }
 
@@ -115,7 +114,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     #to login with username or email
-    'authentication.backends.UsernameOrEmailBackend',
+    #'authentication.backends.UsernameOrEmailBackend',
     #'backends.EmailorUsernameAuthenticationBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
@@ -186,11 +185,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "dj_rest_auth.utils.JWTCookieAuthentication",
+    #"DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
@@ -202,9 +202,37 @@ STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
-GMAIL_API_CLIENT_ID = config("GMAIL_API_CLIENT_ID")
-GMAIL_API_CLIENT_SECRET = config("GMAIL_API_CLIENT_SECRET")
+GMAIL_API_CLIENT_ID = config("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -214,13 +242,15 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'online',
+            'access_type': 'offline',
         }
     }
 }
 
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+BASE_FRONTEND_URL = 'localhost:3000'
 
 
 django_heroku.settings(locals())
