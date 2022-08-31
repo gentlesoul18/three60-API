@@ -7,42 +7,42 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework_simplejwt.tokens import RefreshToken
-
-from .serializers import UserSerializer
+from three60.utils import send_mail
+from api.mixins import ApiAuthMixin
+from .serializers import UserSerializer, RegisterSerializer
 from .models import User
-from .utils import send_mail
+
 
 import jwt,datetime
 
 # Create your views here.
 
-# class RegisterView(GenericAPIView):
-#     serializer_class = RegisterSerializer
+class RegisterView(GenericAPIView, ApiAuthMixin):
+    serializer_class = RegisterSerializer
 
-#     def post(self, request):
+    def post(self, request):
         
-#         serializer = RegisterSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         user_data = serializer.data
-#         user = User.objects.get(email= user_data['email'])
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user_data = serializer.data
+        user = User.objects.get(email= user_data['email'])
 
-#         token = RefreshToken.for_user(user).access_token
-#         current_site = get_current_site(request).domain
-#         relative_url = reverse('verify-email')
-#         absolute_url  = "http://" + current_site + relative_url + "?token=" + str(token)
-#         body = f"Hi {user.username}, verify your email with  this link \n {absolute_url}"
-#         subject = 'email verification'
-#         from_mail = 'devgentlesoul18@gmail.com'
+        token = RefreshToken.for_user(user).access_token
+        current_site = get_current_site(request).domain
+        relative_url = reverse('verify-email')
+        absolute_url  = "http://" + current_site + relative_url + "?token=" + str(token)
+        body = f"Hi {user.username}, verify your email with  this link \n {absolute_url}"
+        subject = 'email verification'
+        from_mail = 'devgentlesoul18@gmail.com'
 
-#         data = {'email_subject':subject, 'email_body':body, 'from_email':from_mail, 'to_email':[user.email]}
+        data = {'email_subject':subject, 'email_body':body, 'from_email':from_mail, 'to_email':[user.email]}
 
-#         send_mail(data)
+        send_mail(data)
 
     
-#         return Response({'data':user_data, 'success':'verification link have been sent to your email'}, status= status.HTTP_201_CREATED)
+        return Response({'data':user_data, 'success':'verification link have been sent to your email'}, status= status.HTTP_201_CREATED)
 
 
 class VerifyEmailView(GenericAPIView):
@@ -93,7 +93,7 @@ class LoginView(GenericAPIView):
         serializer = UserSerializer(user)
 
         response = Response()
-
-        # response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
+        # token = user.tokens()
+        # response.set_cookie(key="jwt", value=token.access_token, httponly=True) # creates cookies for user session
         response.data = {"tokens": user.tokens(), "data":serializer.data}
         return response
