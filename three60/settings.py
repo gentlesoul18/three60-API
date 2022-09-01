@@ -41,7 +41,7 @@ SITE_ID = 2
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [gti
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.sites",
