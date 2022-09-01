@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.http import HttpResponse
 from django.db import transaction
+from rest_framework_simplejwt.tokens import AccessToken
 
 from three60.utils import get_now
 
@@ -13,19 +14,14 @@ from authentication.models import User
 
 import jwt, datetime, requests
 
+
 GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 GOOGLE_ACCESS_TOKEN_OBTAIN_URL = 'https://oauth2.googleapis.com/token'
 GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
 
 def jwt_login(*, response: HttpResponse, user: User) -> HttpResponse:
-    payload = {
-        "id": user.id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24),
-        "iat": datetime.datetime.utcnow(),
-    }
-
-    token = jwt.encode(payload, "secret", algorithm="HS256") # generates access token for login
+    token = AccessToken.for_user(user)# generates access token to authenticate user that logs in with google
 
     response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
 

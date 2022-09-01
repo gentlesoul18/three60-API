@@ -1,3 +1,4 @@
+from os import access
 from django.shortcuts import redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
@@ -8,7 +9,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from three60.mixins import ApiErrorsMixin, ApiAuthMixin, PublicApiMixin
 from three60.utils import send_mail
@@ -17,6 +18,7 @@ from authentication.services import user_get_or_create, google_get_access_token,
 from authentication.selectors import get_user
 from authentication.serializers import UserSerializer, RegisterSerializer
 from authentication.models import User
+
 
 from urllib.parse import urlencode
 
@@ -36,8 +38,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
         user = User.objects.get(email= user_data['email'])
 
         token = RefreshToken.for_user(user).access_token
-        current_site = get_current_site(request).domain
-        print(current_site)
+        current_site = get_current_site(request).domain #get the site the app is on currently
         relative_url = reverse('verify-email')
         absolute_url  = "http://" + current_site + relative_url + "?token=" + str(token)
         body = f"Hi {user.username}, verify your email with  this link \n {absolute_url}"
@@ -66,13 +67,13 @@ class VerifyEmailView(GenericAPIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response(redirect(f'{settings.BASE_FRONTEND_URL}\login'))
-
+            return Response(redirect(f'{settings.BASE_FRONTEND_URL}')) #redirects user to home page
+        # if token has expired
         except jwt.ExpiredSignatureError as identifier:
             return Response(
                 {'timeout':'token has expired'}
             )
-
+        #if token has been tampered with
         except jwt.exceptions.DecodeError as identifier:
             return Response(
                 {'error':'invalid token'}
@@ -103,9 +104,9 @@ class LoginView(GenericAPIView):
         serializer = UserSerializer(user)
 
         response = Response()
-        # token = user.tokens()
-        # response.set_cookie(key="jwt", value=token.access_token, httponly=True) # creates cookies for user session
-        response.data = {"tokens": user.tokens(), "data":serializer.data}
+        token = user.tokens()
+        response.set_cookie(key="jwt", value=str(AccessToken.for_user(user)), httponly=True) # creates cookies for user session
+        response.data = {"tokens": token, "data":serializer.data}
         return response
 
 
@@ -139,8 +140,7 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
 
         profile_data = {
             'email': user_data['email'],
-            'first_name': user_data.get('givenName', ''),
-            'last_name': user_data.get('familyName', ''),
+            'username': user_data.get('given_name', '')
         }
 
         # We use get-or-create logic here for the sake of the example.
@@ -163,8 +163,7 @@ class UserInitApi(PublicApiMixin, ApiErrorsMixin, APIView):
     swagger_schema = None
     class InputSerializer(serializers.Serializer):
         email = serializers.EmailField()
-        first_name = serializers.CharField(required=False, default='')
-        last_name = serializers.CharField(required=False, default='')
+        username = serializers.CharField(required=False, default='')
     def post(self, request, *args, **kwargs):
         id_token = request.headers.get('Authorization')
         google_validate_id_token(id_token=id_token)
