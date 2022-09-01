@@ -34,7 +34,8 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'https://three60-api.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0','https://three60-api.herokuapp.com', 'https://three60-api-gentlesoul18.koyeb.app/']
+
 SITE_ID = 2
 
 
