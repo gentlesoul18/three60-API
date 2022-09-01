@@ -34,14 +34,14 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0','https://three60-api.herokuapp.com', 'https://three60-api-gentlesoul18.koyeb.app/']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'https://three60-api.herokuapp.com', 'https://three60-api-gentlesoul18.koyeb.app/']
 
 SITE_ID = 2
 
 
 # Application definition
 
-INSTALLED_APPS = [gti
+INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.sites",
