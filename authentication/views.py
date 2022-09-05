@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from drf_yasg.utils import swagger_auto_schema
 
 from three60.mixins import ApiErrorsMixin, ApiAuthMixin, PublicApiMixin
 from three60.utils import send_mail
@@ -159,11 +160,12 @@ class UserApi(ApiAuthMixin, ApiErrorsMixin, APIView):
         return Response(get_user(user=request.user))
 
 
-class UserInitApi(PublicApiMixin, ApiErrorsMixin, APIView):
+class CreateUserApi(PublicApiMixin, ApiErrorsMixin, APIView):
     swagger_schema = None
     class InputSerializer(serializers.Serializer):
         email = serializers.EmailField()
         username = serializers.CharField(required=False, default='')
+    @swagger_auto_schema(request_body=InputSerializer)
     def post(self, request, *args, **kwargs):
         id_token = request.headers.get('Authorization')
         google_validate_id_token(id_token=id_token)
