@@ -40,6 +40,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
 
         token = RefreshToken.for_user(user).access_token
         current_site = get_current_site(request).domain #get the site the app is on currently
+        print(current_site)
         relative_url = reverse('verify-email')
         absolute_url  = "http://" + current_site + relative_url + "?token=" + str(token)
         body = f"Hi {user.username}, verify your email with  this link \n {absolute_url}"

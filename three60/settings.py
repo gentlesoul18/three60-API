@@ -41,7 +41,7 @@ ALLOWED_HOSTS = [
     "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
-SITE_ID = 3
+SITE_ID = 2
 
 
 # Application definition
@@ -142,11 +142,14 @@ AUTH_USER_MODEL = "authentication.User"
 #     }
 # }
 
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default="postgres://postgres:oyeladunkola@localhost:5432/three60", conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
