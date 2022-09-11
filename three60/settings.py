@@ -133,19 +133,6 @@ AUTH_USER_MODEL = "authentication.User"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # DATABASES = {
-<<<<<<< HEAD
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": config("USER"),
-#         "USER": "postgres",
-#         "PASSWORD": config("PASSWORD"),
-#         "HOST": "localhost",
-#         "PORT": "5432",
-#     }
-# }
-
-
-=======
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': config('USER'),
@@ -156,7 +143,6 @@ AUTH_USER_MODEL = "authentication.User"
 #     }
 # }
 
->>>>>>> Todo-branch
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -207,14 +193,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-<<<<<<< HEAD
-    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-=======
     'DEFAULT_PERMISSION_CLASSES': (
     #    'rest_framework.authentication.TokenAuthentication',
         'rest_framework.permissions.AllowAny',
@@ -224,7 +202,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
->>>>>>> Todo-branch
     ),
 }
 
