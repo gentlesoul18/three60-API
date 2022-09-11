@@ -30,3 +30,8 @@ class Todo(models.Model):
     def __str__(self) -> str:
         #string to be used when the models is queried
         return self.title
+
+
+    def progress(self):
+        if self.request.method == 'DELETE':
+            return self.status == 'T'

@@ -1,3 +1,4 @@
+from ast import Delete
 from re import U
 from rest_framework.generics import (ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView)
 from rest_framework.response import Response
@@ -68,8 +69,4 @@ class TodoDeleteApi(DestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, IsOwner,)
     lookup_field = "id"
 
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
-
-
-   
+    
