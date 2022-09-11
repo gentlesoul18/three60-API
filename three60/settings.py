@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.twitter",
     # Local apps
     "authentication",
+    "todo",
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ AUTH_USER_MODEL = "authentication.User"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # DATABASES = {
+<<<<<<< HEAD
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
 #         "NAME": config("USER"),
@@ -143,13 +145,24 @@ AUTH_USER_MODEL = "authentication.User"
 # }
 
 
+=======
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': config('USER'),
+#         'USER': 'postgres',
+#         'PASSWORD': config('PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT': '5432', 
+#     }
+# }
+
+>>>>>>> Todo-branch
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -194,12 +207,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
+<<<<<<< HEAD
     # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
+=======
+    'DEFAULT_PERMISSION_CLASSES': (
+    #    'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+>>>>>>> Todo-branch
     ),
 }
 
