@@ -1,5 +1,3 @@
-from cProfile import label
-from os import access
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -11,7 +9,7 @@ class User(AbstractUser):
 
 
     
-    #USERNAME_FIELD = 'email'
+    
     REQUIRED_FIELDS = []
     def tokens(self):
         refresh = RefreshToken.for_user(self)

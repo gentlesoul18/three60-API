@@ -116,9 +116,6 @@ SWAGGER_SETTINGS = {
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-    # to login with username or email
-    #'authentication.backends.UsernameOrEmailBackend',
-    #'backends.EmailorUsernameAuthenticationBackend',
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -194,7 +191,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-    #    'rest_framework.authentication.TokenAuthentication',
         'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (

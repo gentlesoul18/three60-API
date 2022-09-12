@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.urls import reverse
+from django.db.models import Q
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.exceptions import AuthenticationFailed
@@ -88,7 +89,9 @@ class LoginView(GenericAPIView):
         username = request.data['username']
         password = request.data['password']
 
-        user = User.objects.get(username=username)
+        user = User.objects.get(
+            Q(username=username) | Q(email=username)
+        )
 
         if user is None:
             raise AuthenticationFailed('User not found!')
@@ -96,13 +99,7 @@ class LoginView(GenericAPIView):
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password!')
 
-        # payload = {
-        #     "id": user.id,
-        #     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24),
-        #     "iat": datetime.datetime.utcnow(),
-        # }
-
-        #token = jwt.encode(payload, "secret", algorithm="HS256") # generates access token for login
+        
         serializer = UserSerializer(user)
 
         response = Response()
@@ -113,6 +110,7 @@ class LoginView(GenericAPIView):
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
+    
     class InputSerializer(serializers.Serializer):
         code = serializers.CharField(required=False)
         error = serializers.CharField(required=False)

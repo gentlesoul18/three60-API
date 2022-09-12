@@ -5,11 +5,11 @@ User = settings.AUTH_USER_MODEL
 # Create your models here.
 
 class Todo(models.Model):
-    BACKLOG = 'B'
-    IN_PROGRESS = 'I'
-    FINISHED = 'F'
-    OVER_DUE = 'O'
-    TRASH = 'T'
+    BACKLOG = 'Backlog'
+    IN_PROGRESS = 'In Progress'
+    FINISHED = 'Finished'
+    OVER_DUE = 'Over Due'
+    TRASH = 'Trash'
     TODO_STATUS_CHOICES = [
         (BACKLOG, 'Backlog'),
         (IN_PROGRESS, 'In Progress'),
@@ -21,9 +21,9 @@ class Todo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length= 50)
     description = models.CharField(max_length= 500)
-    status = models.CharField(max_length=1, choices=TODO_STATUS_CHOICES, default=BACKLOG)
+    status = models.CharField(max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG)
     created = models.DateTimeField(auto_now_add = True)
-    updated = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
 
     class Meta:
         ordering = ['title']
