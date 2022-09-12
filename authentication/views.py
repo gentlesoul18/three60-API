@@ -110,7 +110,7 @@ class LoginView(GenericAPIView):
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
-    
+
     class InputSerializer(serializers.Serializer):
         code = serializers.CharField(required=False)
         error = serializers.CharField(required=False)

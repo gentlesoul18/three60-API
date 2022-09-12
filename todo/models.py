@@ -24,9 +24,14 @@ class Todo(models.Model):
     status = models.CharField(max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
+    
 
     class Meta:
         ordering = ['title']
     def __str__(self) -> str:
         #string to be used when the models is queried
         return self.title
+
+
+
+    
