@@ -37,8 +37,9 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "https://three60-api.herokuapp.com",
-    "https://three60-api-gentlesoul18.koyeb.app",
+    "'three60-api-gentlesoul18.koyeb.app'",
 ]
+
 
 SITE_ID = 2
 
