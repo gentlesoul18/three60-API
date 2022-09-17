@@ -14,7 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
-import django_heroku
 import dj_database_url
 from decouple import config
 
@@ -257,4 +256,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 BASE_FRONTEND_URL = "localhost:3000"
 
 
-django_heroku.settings(locals())
+
