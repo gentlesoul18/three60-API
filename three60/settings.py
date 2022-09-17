@@ -14,6 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import django_heroku
 import dj_database_url
 from decouple import config
 
@@ -37,9 +38,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "https://three60-api.herokuapp.com",
-    "'three60-api-gentlesoul18.koyeb.app'",
+    "https://three60-api-gentlesoul18.koyeb.app",
 ]
-
 
 SITE_ID = 2
 
@@ -257,4 +257,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 BASE_FRONTEND_URL = "localhost:3000"
 
 
-
+django_heroku.settings(locals())
