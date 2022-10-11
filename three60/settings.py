@@ -216,10 +216,32 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # email backend used with gmailapi package
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
-EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-GMAIL_API_CLIENT_ID = config("CLIENT_IID")
-GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
-GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
+# EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
+# GMAIL_API_CLIENT_ID = config("CLIENT_IID")
+# GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
+# GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
+
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# Host for sending email.
+EMAIL_HOST = "localhost"
+
+# Port for sending email.
+EMAIL_PORT = 587
+
+# Whether to send SMTP 'Date' header in the local time zone or in UTC.
+EMAIL_USE_LOCALTIME = False
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+EMAIL_TIMEOUT = None
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),

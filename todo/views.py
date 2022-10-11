@@ -1,5 +1,4 @@
-from ast import Delete
-from re import U
+from django.db.models import Count, Q
 from rest_framework.generics import (ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView)
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,14 +15,14 @@ from .permissions import IsOwner
 
 class TodoListApi(ListAPIView):
     serializer_class = TodoSerializer
-    queryset = Todo.objects.all()
+    queryset = Todo.objects.annotate(
+        nBacklog=Count('pk', filter=Q(status='Backlog')),
+        nInProgress=Count('pk', filter=Q(status='In Progress')),
+        nFinished=Count('pk', filter=Q(status='In Progress')),
+        nOverDue=Count('pk', filter=Q(status='Over due')),
+        nTrash=Count('pk', filter=Q(status='Trash'))
+        ).all()
     permission_classes = (permissions.IsAuthenticated,IsOwner,)
-
-    def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
-    
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
 
 
 class TodoCreateApi(CreateAPIView):

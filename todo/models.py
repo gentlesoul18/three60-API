@@ -35,14 +35,7 @@ class Todo(SoftDeleteModel, models.Model):
         return self.title
 
 
-    def trash(self):
 
-        trashed_todo = Todo.del_objects.all()
-        for todo in trashed_todo:
-            if todo.status != 'T':
-                todo.status = 'T'
-                self.save()
-        return len(trashed_todo)
 
 
  
