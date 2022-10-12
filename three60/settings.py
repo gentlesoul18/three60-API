@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
-import django_heroku
 from datetime import timedelta
 import dj_database_url
 from decouple import config
@@ -263,4 +262,4 @@ BASE_FRONTEND_URL = "localhost:3000"
 
 
 
-django_heroku.settings(locals())
+4
