@@ -1,5 +1,8 @@
+from asyncio.windows_events import NULL
+from datetime import datetime
 from django.db import models
 from django.conf import settings
+from .softdelete import SoftDeleteModel
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.
@@ -35,3 +38,9 @@ class Todo(models.Model):
 
 
     
+
+
+
+
+
+ 

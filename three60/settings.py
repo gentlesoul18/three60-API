@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import django_heroku
 from datetime import timedelta
 import dj_database_url
 from decouple import config
@@ -54,20 +55,23 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third party apps
+
+    #Third party apps
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "gmailapi_backend",
     "drf_yasg",
-    # all_auth apps
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
-    "allauth.socialaccount.providers.twitter",
-    # Local apps
+
+    #all_auth apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+
+    #Local apps
     "authentication",
     "todo",
 ]
@@ -97,7 +101,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.request",
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -129,18 +133,25 @@ AUTH_USER_MODEL = "authentication.User"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config("USER"),
+        "USER": "postgres",
+        "PASSWORD": config("PASSWORD"),
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': config('USER'),
-#         'USER': 'postgres',
-#         'PASSWORD': config('PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432', 
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
 
 DATABASES = {
     'default': {
@@ -195,11 +206,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
         # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        "rest_framework.authentication.BasicAuthentication",
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
@@ -247,9 +258,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "profile",
             "email",
         ],
-        "AUTH_PARAMS": {
-            "access_type": "offline",
-        },
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
     }
 }
 
@@ -259,3 +270,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 BASE_FRONTEND_URL = "localhost:3000"
 
 
+
+django_heroku.settings(locals())
