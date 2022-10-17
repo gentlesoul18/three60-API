@@ -38,12 +38,11 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
         serializer.save()
         user_data = serializer.data
         user = User.objects.get(email= user_data['email'])
-
         token = user.tokens()
         response = Response()
-        response.data = {'data' : user_data, 'token':token}
+        response.data = {'data': user_data, 'token':token}
         return response
-            
+        
 
 class LoginView(GenericAPIView):
     serializer_class = UserSerializer

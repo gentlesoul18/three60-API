@@ -12,11 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-import os
+from decouple import config
 from datetime import timedelta
 import dj_database_url
-from decouple import config
-
+import os
 
 load_dotenv()
 
@@ -218,6 +217,7 @@ EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 GMAIL_API_CLIENT_ID = config("CLIENT_IID")
 GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = '1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao'
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
