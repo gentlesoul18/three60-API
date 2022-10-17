@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-import os
+from decouple import config
 from datetime import timedelta
 import django_heroku
 import dj_database_url
-from decouple import config
-
+import os
 
 load_dotenv()
 
@@ -242,6 +241,7 @@ EMAIL_USE_SSL = False
 EMAIL_SSL_CERTFILE = None
 EMAIL_SSL_KEYFILE = None
 EMAIL_TIMEOUT = None
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
