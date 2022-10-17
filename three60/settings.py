@@ -14,7 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 from decouple import config
 from datetime import timedelta
-import django_heroku
 import dj_database_url
 import os
 
@@ -34,13 +33,14 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '*',
     "localhost",
     "0.0.0.0",
     "https://three60-api.herokuapp.com",
-    "https://three60-api-gentlesoul18.koyeb.app/",
+    "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
-SITE_ID = 2
+SITE_ID = 3
 
 
 # Application definition
@@ -53,20 +53,23 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third party apps
+
+    #Third party apps
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "gmailapi_backend",
     "drf_yasg",
-    # all_auth apps
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
-    "allauth.socialaccount.providers.twitter",
-    # Local apps
+
+    #all_auth apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
+
+    #Local apps
     "authentication",
     "todo",
 ]
@@ -96,7 +99,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.request",
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -115,9 +118,6 @@ SWAGGER_SETTINGS = {
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-    # to login with username or email
-    #'authentication.backends.UsernameOrEmailBackend',
-    #'backends.EmailorUsernameAuthenticationBackend',
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -131,25 +131,24 @@ AUTH_USER_MODEL = "authentication.User"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": config("USER"),
+#         "USER": "postgres",
+#         "PASSWORD": config("PASSWORD"),
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+#}
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config("USER"),
-        "USER": "postgres",
-        "PASSWORD": config("PASSWORD"),
-        "HOST": "localhost",
-        "PORT": "5432",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -194,9 +193,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": (
-        #    'rest_framework.authentication.TokenAuthentication',
-        "rest_framework.permissions.AllowAny",
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -204,8 +202,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
         "rest_framework.authentication.BasicAuthentication",
     ),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 REST_USE_JWT = True
@@ -215,32 +213,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # email backend used with gmailapi package
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
-# EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-# GMAIL_API_CLIENT_ID = config("CLIENT_IID")
-# GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
-# GMAIL_API_REFRESH_TOKEN = config("GMAIL_API_REFRESH_TOKEN")
-
-
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-# Host for sending email.
-EMAIL_HOST = "localhost"
-
-# Port for sending email.
-EMAIL_PORT = 587
-
-# Whether to send SMTP 'Date' header in the local time zone or in UTC.
-EMAIL_USE_LOCALTIME = False
-
-# Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_SSL_CERTFILE = None
-EMAIL_SSL_KEYFILE = None
-EMAIL_TIMEOUT = None
+EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
+GMAIL_API_CLIENT_ID = config("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
+GMAIL_API_REFRESH_TOKEN = '1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao'
 
 
 SIMPLE_JWT = {
@@ -273,9 +249,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "profile",
             "email",
         ],
-        "AUTH_PARAMS": {
-            "access_type": "offline",
-        },
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
     }
 }
 
@@ -283,6 +259,3 @@ SOCIALACCOUNT_PROVIDERS = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 BASE_FRONTEND_URL = "localhost:3000"
-
-
-django_heroku.settings(locals())
