@@ -30,7 +30,4 @@ class SoftDeleteModel(models.Model):
         self.is_deleted=True
         self.save()
 
-        
-    def restore(self):
-        self.is_deleted=False
-        self.save()
+    
