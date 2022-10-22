@@ -1,13 +1,11 @@
-from collections import OrderedDict
 from django.db.models import Count, Q
 from rest_framework.generics import (ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView)
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import serializers, status, permissions
 from drf_yasg.utils import swagger_auto_schema
-from three60.mixins import UpdateModelMixin, ApiAuthMixin
+from todo.softdelete import SoftDeleteModel
 from .models import Todo
 from .serializers import TodoSerializer, TodoStatusCountSerializer
 from .permissions import IsOwner
@@ -77,5 +75,4 @@ class TodoDeleteApi(DestroyAPIView):
     queryset = Todo.objects.all()
     permission_classes = (permissions.IsAuthenticated, IsOwner,)
     lookup_field = "id"
-
     

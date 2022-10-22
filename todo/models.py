@@ -35,7 +35,7 @@ class Todo(models.Model):
         return self.title
 
 
-
+    
     
 
 
