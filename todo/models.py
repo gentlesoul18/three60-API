@@ -1,8 +1,31 @@
-from asyncio.windows_events import NULL
 from datetime import datetime
 from django.db import models
 from django.conf import settings
-from .softdelete import SoftDeleteModel
+from .softdelete import SoftDeleteManager, SoftDeletedObjects
+
+
+class SoftDeleteModel(models.Model):
+    is_deleted = models.BooleanField(default=False)
+    objects = SoftDeleteManager()
+    del_objects = SoftDeletedObjects()
+
+
+
+    class Meta:
+        abstract = True
+
+    def destroy(self):
+        self.is_deleted=True
+        Todo.status = 'trash'
+
+        self.save()
+
+        
+    def restore(self):
+        self.is_deleted=False
+        self.save()
+
+
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.
