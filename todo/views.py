@@ -5,8 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import serializers, status, permissions
 from drf_yasg.utils import swagger_auto_schema
-from todo.softdelete import SoftDeleteModel
-from .models import Todo
+from .models import Todo, SoftDeleteModel
 from .serializers import TodoSerializer, TodoStatusCountSerializer
 from .permissions import IsOwner
 
