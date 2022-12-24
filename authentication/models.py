@@ -12,6 +12,6 @@ class User(AbstractUser):
     
     REQUIRED_FIELDS = []
     def tokens(self):
-        refresh = RefreshToken.for_user(self)
+        # refresh = RefreshToken.for_user(self) , 'refresh':str(refresh)
         access = AccessToken.for_user(self)
-        return {'access':str(access), 'refresh':str(refresh)}
+        return {'access':str(access)}
