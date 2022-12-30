@@ -76,7 +76,7 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
         code = serializers.CharField(required=False)
         error = serializers.CharField(required=False)
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         input_serializer = self.InputSerializer(data=request.GET)
         input_serializer.is_valid(raise_exception=True)
 
