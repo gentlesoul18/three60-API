@@ -41,7 +41,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
         user = User.objects.get(email= user_data['email'])
         token = user.tokens()
         response = Response()
-        response.data = {**user_data, 'access_token':token.access}
+        response.data = {**user_data, 'access_token':token}
         return response
         
 
