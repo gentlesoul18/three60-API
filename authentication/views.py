@@ -41,7 +41,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
         user = User.objects.get(email= user_data['email'])
         token = user.tokens()
         response = Response()
-        response.data = {'data': user_data, 'token':token}
+        response.data = {**user_data, 'access_token':token}
         return response
         
 
@@ -54,10 +54,12 @@ class LoginView(GenericAPIView):
         user = User.objects.get(
             Q(username=username) | Q(email=username)
         )
-
+        print(user)
         if user is None:
             raise AuthenticationFailed('User not found!')
-
+        # if user.DoesNotExist:
+        #     raise AuthenticationFailed("This user does not exist!")
+                
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password!')
 
@@ -66,8 +68,8 @@ class LoginView(GenericAPIView):
 
         response = Response()
         token = user.tokens()
-        response.set_cookie(key="jwt", value=str(AccessToken.for_user(user)), httponly=True) # creates cookies for user session
-        response.data = {"tokens": token, "data":serializer.data}
+        response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
+        response.data = {"access_token": token, **serializer.data}
         return response
 
 
