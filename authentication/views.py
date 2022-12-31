@@ -12,6 +12,7 @@ from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from three60.mixins import ApiErrorsMixin, ApiAuthMixin, PublicApiMixin
 from three60.utils import send_mail
@@ -71,12 +72,22 @@ class LoginView(GenericAPIView):
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
-
     class InputSerializer(serializers.Serializer):
-        code = serializers.CharField(required=False)
+        code = serializers.CharField(required=True)
         error = serializers.CharField(required=False)
 
-    def post(self, request, *args, **kwargs):
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'code',
+                openapi.IN_QUERY,
+                description='code',
+                required=True,
+                type=openapi.TYPE_STRING,
+            ),
+         ]
+)
+    def get(self, request, *args, **kwargs):
         input_serializer = self.InputSerializer(data=request.GET)
         input_serializer.is_valid(raise_exception=True)
 

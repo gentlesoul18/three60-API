@@ -3,6 +3,11 @@ from three60.utils import PlainValidationError
 from .models import User
 
 
+class InputSerializer(serializers.Serializer):
+    code = serializers.CharField(required=True)
+    error = serializers.CharField(required=False)
+        
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             required=True,
