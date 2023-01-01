@@ -7,6 +7,10 @@ from rest_framework.exceptions import APIException
 
 
 class PlainValidationError(APIException):
+    """
+    Utils used to raise JSON Validation error 
+    instead of the django dictionary-list error
+    """
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = ("Invalid input.")
     default_code = "invalid"
@@ -17,6 +21,9 @@ class PlainValidationError(APIException):
         self.detail = detail
 
 def send_mail(data):
+    """
+    For sending mail in the app
+    """
     mail = EmailMessage(
         subject=data['email_subject'],
         body=data['email_body'],

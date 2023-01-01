@@ -10,14 +10,16 @@ from rest_framework_simplejwt.tokens import AccessToken
 from three60.utils import get_now
 
 from authentication.models import User
-from authentication.models import User
+
 
 import jwt, datetime, requests
 
 
 GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 GOOGLE_ACCESS_TOKEN_OBTAIN_URL = 'https://oauth2.googleapis.com/token'
+# to obtain the token to get user info
 GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+# to obtain the user info with the token sent from google
 
 
 def jwt_login(*, response: HttpResponse, user: User) -> HttpResponse:

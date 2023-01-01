@@ -30,6 +30,10 @@ import jwt,datetime
 # Create your views here.
 
 class RegisterView(GenericAPIView, ApiAuthMixin):
+    """
+    View to sign up new user using normal registration
+    """
+
     serializer_class = RegisterSerializer
 
     def post(self, request):
@@ -46,6 +50,9 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
         
 
 class LoginView(GenericAPIView):
+    """
+    View to Log in Existing Users
+    """
     serializer_class = UserSerializer
     def post(self, request):
         username = request.data['username']
@@ -61,20 +68,25 @@ class LoginView(GenericAPIView):
         if not user.check_password(password):
             raise ValidationError({'message':'Incorrect Password!'})
 
-        if user:
-            serializer = UserSerializer(user)
+        serializer = UserSerializer(user)
 
-            response = Response()
-            token = user.tokens()
-            response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
-            response.data = {"access_token": token, **serializer.data}
-            return response
+        response = Response()
+        token = user.tokens()
+        response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
+        response.data = {"access_token": token, **serializer.data}
+        return response
 
-        else:
-            raise AuthenticationFailed("User Doesnot Exist")
+
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
+    """
+    Google Login View to log user in with just a click
+    parameter needed: code sent to google from frontend
+    The code is used to generate users access token then the access token,
+    the access token is then used to generate the user's data from google
+    """
+
     class InputSerializer(serializers.Serializer):
         code = serializers.CharField(required=True)
         error = serializers.CharField(required=False)
@@ -135,6 +147,11 @@ class UserApi(ApiAuthMixin, ApiErrorsMixin, APIView):
 
 
 class CreateUserApi(PublicApiMixin, ApiErrorsMixin, APIView):
+    """
+    This view is used to create user that logs in with google
+    the user's info is added to the apps database
+    """
+
     swagger_schema = None
     class InputSerializer(serializers.Serializer):
         email = serializers.EmailField()
