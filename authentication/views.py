@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from rest_framework.generics import GenericAPIView
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework.views import APIView
@@ -50,27 +50,28 @@ class LoginView(GenericAPIView):
     def post(self, request):
         username = request.data['username']
         password = request.data['password']
+        try:
+            user = User.objects.get(
+                Q(username=username) | Q(email=username)
+            )
+        except BaseException as e:
+            raise ValidationError({"message":"This user does not exist"})
 
-        user = User.objects.get(
-            Q(username=username) | Q(email=username)
-        )
-        print(user)
-        if user is None:
-            raise AuthenticationFailed('User not found!')
-        # if user.DoesNotExist:
-        #     raise AuthenticationFailed("This user does not exist!")
-                
+
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect Password!')
+            raise ValidationError({'message':'Incorrect Password!'})
 
-        
-        serializer = UserSerializer(user)
+        if user:
+            serializer = UserSerializer(user)
 
-        response = Response()
-        token = user.tokens()
-        response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
-        response.data = {"access_token": token, **serializer.data}
-        return response
+            response = Response()
+            token = user.tokens()
+            response.set_cookie(key="jwt", value=token, httponly=True) # creates cookies for user session
+            response.data = {"access_token": token, **serializer.data}
+            return response
+
+        else:
+            raise AuthenticationFailed("User Doesnot Exist")
 
 
 class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):

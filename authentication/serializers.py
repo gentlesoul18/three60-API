@@ -38,13 +38,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         username_exists = User.objects.filter(username=attrs['username']).exists()
 
         if username_exists:
-            raise PlainValidationError({"username":"This username exist, please enter a new username"})
+            raise PlainValidationError({"message":"Username already exist, enter a unique username"})
         elif email_exists:
-            raise PlainValidationError({"email":"This email exist, please enter a new email"})
+            raise PlainValidationError({"message":"Email already exist, enter a unique email"})
         elif len(attrs['password']) < 8:
-            raise PlainValidationError({"password": "Password to short, it must contain atleast 8 characters!"})
+            raise PlainValidationError({"message": "Password too short, it must contain atleast 8 characters!"})
         elif attrs['password'] != attrs['confirm_password']:
-            raise PlainValidationError({"password":"Password fields doesn't match."})
+            raise PlainValidationError({"message":"Password fields doesn't match."})
         return attrs
 
     def create(self, validated_data):
