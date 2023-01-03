@@ -7,17 +7,19 @@ from django.http import HttpResponse
 from django.db import transaction
 from rest_framework_simplejwt.tokens import AccessToken
 
-from three60.utils import get_now
+from three60.utils import get_now, PlainValidationError
 
 from authentication.models import User
-from authentication.models import User
+
 
 import jwt, datetime, requests
 
 
 GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 GOOGLE_ACCESS_TOKEN_OBTAIN_URL = 'https://oauth2.googleapis.com/token'
+# to obtain the token to get user info
 GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+# to obtain the user info with the token sent from google
 
 
 def jwt_login(*, response: HttpResponse, user: User) -> HttpResponse:
@@ -67,15 +69,15 @@ def google_get_access_token(*, code: str, redirect_uri: str) -> str:
     return access_token
 
 
-def google_get_user_info(*, access_token: str) -> Dict[str, Any]:
+def google_get_user_info(access_token: str):  #-> Dict[str, Any]
     # Reference: https://developers.google.com/identity/protocols/oauth2/web-server#callinganapi
     response = requests.get(
         GOOGLE_USER_INFO_URL,
-        params={'access_token': access_token}
+        params=access_token
     )
 
     if not response.ok:
-        raise ValidationError('Failed to obtain user info from Google.')
+        raise PlainValidationError({'message': 'Failed to obtain user info from Google.'})
 
     return response.json()
 
@@ -133,5 +135,5 @@ def user_get_or_create(*, email: str, **extra_data) -> Tuple[User, bool]:
     #after querying user from database, if user exist, it return user
     if user:
         return user, False
-    #else it creates the user with the info that we got from the user's google
+    #else it creates the user with the info that we got from the user's mail
     return user_create(email=email, **extra_data), True
