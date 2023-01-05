@@ -96,7 +96,7 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     class InputSerializer(serializers.Serializer):
         code = serializers.CharField(required=True)
         
-
+    serializer_class = InputSerializer
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -108,27 +108,19 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
             ),
         ]
     )
-    def get(self, request, *args, **kwargs):
-        input_serializer = self.InputSerializer(data=request.GET)
-        input_serializer.is_valid(raise_exception=True)
 
-        validated_data = input_serializer.validated_data
+    
 
-        code = validated_data.get("code")
+    def post(self, request):
+    
+        code = request.data['code']
+
         print("s", code)
-        # error = validated_data.get("error")
+        
+        # domain = get_current_site(request).domain
+        # api_uri = reverse("google-login")
+        # redirect_uri = f"{domain}{api_uri}"
 
-        # login_url = f"{settings.BASE_FRONTEND_URL}/login"
-
-        # if error or not code:
-        #     params = urlencode({"error": error})
-        #     return redirect(f"{login_url}?{params}")
-
-        domain = get_current_site(request).domain
-        api_uri = reverse("google-login")
-        redirect_uri = f"{domain}{api_uri}"
-
-        # access_token = google_get_access_token(code=code, redirect_uri=redirect_uri)
 
         user_data = google_get_user_info(access_token=code)
 
@@ -147,38 +139,38 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
         return response
 
 
-class UserApi(ApiAuthMixin, ApiErrorsMixin, APIView):
-    swagger_schema = None
+# class UserApi(ApiAuthMixin, ApiErrorsMixin, APIView):
+#     swagger_schema = None
 
-    def get(self, request):
-        return Response(get_user(user=request.user))
+#     def get(self, request):
+#         return Response(get_user(user=request.user))
 
 
-class CreateUserApi(PublicApiMixin, ApiErrorsMixin, APIView):
-    """
-    This view is used to create user that logs in with google
-    the user's info is added to the apps database
-    """
+# class CreateUserApi(PublicApiMixin, ApiErrorsMixin, APIView):
+#     """
+#     This view is used to create user that logs in with google
+#     the user's info is added to the apps database
+#     """
 
-    swagger_schema = None
+#     swagger_schema = None
 
-    class InputSerializer(serializers.Serializer):
-        email = serializers.EmailField()
-        username = serializers.CharField(required=False, default="")
+#     class InputSerializer(serializers.Serializer):
+#         email = serializers.EmailField()
+#         username = serializers.CharField(required=False, default="")
 
-    @swagger_auto_schema(request_body=InputSerializer)
-    def post(self, request, *args, **kwargs):
-        id_token = request.headers.get("Authorization")
-        google_validate_id_token(id_token=id_token)
+#     @swagger_auto_schema(request_body=InputSerializer)
+#     def post(self, request, *args, **kwargs):
+#         id_token = request.headers.get("Authorization")
+#         google_validate_id_token(id_token=id_token)
 
-        serializer = self.InputSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+#         serializer = self.InputSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
 
-        # We use get-or-create logic here for the sake of the example.
-        # We don't have a sign-up flow.
-        user, _ = user_get_or_create(**serializer.validated_data)
+#         # We use get-or-create logic here for the sake of the example.
+#         # We don't have a sign-up flow.
+#         user, _ = user_get_or_create(**serializer.validated_data)
 
-        response = Response(data=get_user(user=user))
-        response = jwt_login(response=response, user=user)
+#         response = Response(data=get_user(user=user))
+#         response = jwt_login(response=response, user=user)
 
-        return response
+#         return response
