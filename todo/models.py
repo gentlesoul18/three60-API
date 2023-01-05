@@ -50,6 +50,7 @@ class Todo(models.Model):
     status = models.CharField(max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
+    is_deleted = models.BooleanField(default=False)
     
 
     class Meta:
