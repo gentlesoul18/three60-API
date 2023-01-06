@@ -73,7 +73,7 @@ def google_get_user_info(access_token: str):  #-> Dict[str, Any]
     # Reference: https://developers.google.com/identity/protocols/oauth2/web-server#callinganapi
     response = requests.get(
         GOOGLE_USER_INFO_URL,
-        params=access_token
+        params={"access_token":access_token}
     )
 
     if not response.ok:
