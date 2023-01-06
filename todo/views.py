@@ -15,13 +15,14 @@ class TodoStatusCountApi(ListAPIView):
     permission_classes = (permissions.IsAuthenticated, IsOwner,)
 
     def get_queryset(self):
-        return Todo.objects.annotate(
-            nBacklog=Count('pk', filter=Q(status='Backlog')),
-            nInProgress=Count('pk', filter=Q(status='In Progress')),
-            nFinished=Count('pk', filter=Q(status='Finished')),
-            nOverDue=Count('pk', filter=Q(status='Over due')),
-            nTrash=Count('pk', filter=Q(status='Trash'))
+        todo = Todo.objects.annotate(
+            Backlog=Count('pk', filter=Q(status='Backlog')),
+            InProgress=Count('pk', filter=Q(status='In Progress')),
+            Finished=Count('pk', filter=Q(status='Finished')),
+            OverDue=Count('pk', filter=Q(status='Over due')),
+            Trash=Count('pk', filter=Q(status='Trash'))
             ).filter(user = self.request.user)
+        return todo
 
 class TodoListApi(ListAPIView):
     serializer_class = TodoSerializer
