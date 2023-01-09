@@ -18,7 +18,7 @@ import jwt, datetime, requests
 GOOGLE_ID_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 GOOGLE_ACCESS_TOKEN_OBTAIN_URL = 'https://oauth2.googleapis.com/token'
 # to obtain the token to get user info
-GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
 # to obtain the user info with the token sent from google
 
 
