@@ -12,16 +12,3 @@ class TodoSerializer(serializers.ModelSerializer):
 
 
     
-
-
-class TodoStatusCountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Todo
-        fields = ["nBacklog", 'nInProgress', 'nFinished', 'nOverDue', 'nTrash']
-
-
-    nBacklog = serializers.IntegerField(read_only = True)
-    nInProgress = serializers.IntegerField(read_only = True)
-    nFinished = serializers.IntegerField(read_only = True)
-    nOverDue = serializers.IntegerField(read_only = True)
-    nTrash = serializers.IntegerField(read_only = True)
