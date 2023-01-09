@@ -112,8 +112,11 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     
 
     def post(self, request):
+
+        code = request.GET.get('code')
     
-        code = request.data['code']
+    
+        # code = request.data['code']
 
         user_data = google_get_user_info(access_token=code)
 
