@@ -115,13 +115,6 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     
         code = request.data['code']
 
-        print("s", code)
-        
-        # domain = get_current_site(request).domain
-        # api_uri = reverse("google-login")
-        # redirect_uri = f"{domain}{api_uri}"
-
-
         user_data = google_get_user_info(access_token=code)
 
         profile_data = {

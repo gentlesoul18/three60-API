@@ -1,28 +1,27 @@
-from django.db.models import Count, Q
-from rest_framework.generics import (ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView)
+from rest_framework.decorators import api_view
+from rest_framework.generics import (ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView, GenericAPIView)
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.authentication import TokenAuthentication
-from rest_framework import serializers, status, permissions
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework import  permissions
+
 from .models import Todo, SoftDeleteModel
-from .serializers import TodoSerializer, TodoStatusCountSerializer
+from .serializers import TodoSerializer
 from .permissions import IsOwner
 
 # Create your views here.
-class TodoStatusCountApi(ListAPIView):
-    serializer_class = TodoStatusCountSerializer
-    permission_classes = (permissions.IsAuthenticated, IsOwner,)
 
-    def get_queryset(self):
-        todo = Todo.objects.annotate(
-            Backlog=Count('pk', filter=Q(status='Backlog')),
-            InProgress=Count('pk', filter=Q(status='In Progress')),
-            Finished=Count('pk', filter=Q(status='Finished')),
-            OverDue=Count('pk', filter=Q(status='Over due')),
-            Trash=Count('pk', filter=Q(status='Trash'))
-            ).filter(user = self.request.user)
-        return todo
+
+@api_view(http_method_names=['GET'])
+def status_count(request):
+    backlog = Todo.objects.filter(status = 'Backlog').filter(user = request.user).count()
+    inprogress = Todo.objects.filter(status = 'In Progress').filter(user = request.user).count()
+    finished = Todo.objects.filter(status = 'Finished').filter(user = request.user).count()
+    overdue = Todo.objects.filter(status = 'Over Due').filter(user = request.user).count()
+    trash = Todo.objects.filter(status = 'Trash').filter(user = request.user).count()
+    
+
+    return Response({'backlog': backlog, 'in progress': inprogress, 'finished': finished, 'over due': overdue, 'trash': trash})
+
+
 
 class TodoListApi(ListAPIView):
     serializer_class = TodoSerializer
