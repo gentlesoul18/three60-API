@@ -24,15 +24,9 @@ GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
 
 
 def jwt_login(*, response: HttpResponse, user: User) -> HttpResponse:
-    token = AccessToken.for_user(
-        user
-    )  # generates access token to authenticate user that logs in with google
+    token = user.tokens()  # generates access token to authenticate user that logs in with google
 
-    response.set_cookie(
-        key="jwt", value=token, httponly=True
-    )  # creates cookies for user session
-
-    return response
+    return token
 
 
 def google_validate_id_token(*, id_token: str) -> bool:
