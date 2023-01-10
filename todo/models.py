@@ -5,19 +5,18 @@ from .softdelete import SoftDeleteManager, SoftDeletedObjects
 
 
 class SoftDeleteModel(models.Model):
-    is_deleted = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default= False)
     objects = SoftDeleteManager()
     del_objects = SoftDeletedObjects()
-
 
 
     class Meta:
         abstract = True
 
-    def destroy(self):
+
+    def softdelete(self):
         self.is_deleted=True
         Todo.status = 'trash'
-
         self.save()
 
         
@@ -26,11 +25,15 @@ class SoftDeleteModel(models.Model):
         self.save()
 
 
+    def delete():
+        pass 
+
+
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.
 
-class Todo(models.Model):
+class Todo(SoftDeleteModel, models.Model):
     BACKLOG = 'Backlog'
     IN_PROGRESS = 'In Progress'
     FINISHED = 'Finished'
@@ -50,7 +53,6 @@ class Todo(models.Model):
     status = models.CharField(max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
-    is_deleted = models.BooleanField(default=False)
     
 
     class Meta:

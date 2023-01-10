@@ -115,6 +115,8 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
         user, _ = user_get_or_create(**profile_data)
 
         response = Response()
-        response = jwt_login(response=response, user=user)
+        token = jwt_login(response=response, user=user)
+        response.data = {"access token": token, **profile_data}
+        
 
         return response
