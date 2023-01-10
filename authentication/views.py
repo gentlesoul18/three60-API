@@ -127,6 +127,8 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
 
         # We use get-or-create logic here for the sake of the example.
         # We don't have a sign-up flow.
+
+        print (profile_data)
         user, _ = user_get_or_create(**profile_data)
 
         response = Response()
