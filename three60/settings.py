@@ -260,6 +260,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 BASE_FRONTEND_URL = "localhost:3000"
 
 
+
 # if ENVIRONMENT == 'production':
 #     DEBUG = False
 #     SECRET_KEY = os.getenv('SECRET_KEY')
