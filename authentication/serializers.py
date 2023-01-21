@@ -5,8 +5,10 @@ from .models import User
 
 class InputSerializer(serializers.Serializer):
     code = serializers.CharField(required=True)
-    error = serializers.CharField(required=False)
-        
+
+    class Meta:
+        pass
+          
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
