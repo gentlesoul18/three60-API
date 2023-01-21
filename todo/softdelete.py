@@ -1,19 +1,17 @@
-from django.db import models
+# from django.db import models
 
 
 
+# class SoftDeleteManager(models.Manager):
 
-
-class SoftDeleteManager(models.Manager):
-
-    def get_queryset(self):
-        return super().get_queryset().filter(is_deleted=False)
+#     def get_queryset(self):
+#         return super().get_queryset().filter(deleted=False)
 
 
 
-class SoftDeletedObjects(models.Manager):
+# class SoftDeletedObjects(models.Manager):
 
-    def get_queryset(self):
-        return super().get_queryset().filter(is_deleted = True)
+#     def get_queryset(self):
+#         return super().get_queryset().filter(deleted = True)
 
 
