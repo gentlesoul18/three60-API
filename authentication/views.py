@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework.generics import GenericAPIView
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework import  serializers
+from rest_framework import  serializers, status
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -15,9 +15,11 @@ from authentication.services import (
     google_get_user_info,
     jwt_login,
 )
-from authentication.serializers import UserSerializer, RegisterSerializer
+from authentication.serializers import UserSerializer, RegisterSerializer, InputSerializer
 from authentication.models import User
-
+import coreapi
+import coreschema
+from rest_framework.schemas import ManualSchema
 
 
 # Create your views here.
@@ -80,27 +82,28 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     the access token is then used to generate the user's data from google
     """
 
-    class InputSerializer(serializers.Serializer):
-        code = serializers.CharField(required=True)
-        
+    
     serializer_class = InputSerializer
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(
-                "code",
-                openapi.IN_QUERY,
-                description="code",
-                required=True,
-                type=openapi.TYPE_STRING,
-            ),
+
+    schema = ManualSchema(
+        description="User register endpoint.",
+        fields=[
+            
         ]
     )
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT, 
+        properties={
+            'code': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+        }
+    ))
+    
 
     
 
     def post(self, request):
 
-        code = request.GET.get('code')
+        code = request.data['code']
 
         user_data = google_get_user_info(access_token=code)
 
