@@ -29,7 +29,7 @@ def status_count(request):
 
     return Response(
         {
-            "backlog": backlog,
+            "backlog": backlog, 
             "in progress": inprogress,
             "finished": finished,
             "over due": overdue,
@@ -70,7 +70,7 @@ class TodoDetailApi(RetrieveAPIView):
     queryset = Todo.objects.filter(deleted = False)
     permission_classes = (
         permissions.IsAuthenticated,
-        IsOwner,
+        IsOwner
     )
     lookup_field = "id"
 
@@ -86,20 +86,30 @@ class TodoUpdateApi(UpdateAPIView):
     queryset = Todo.objects.all()
     permission_classes = (
         permissions.IsAuthenticated,
-        IsOwner,
+        IsOwner
     )
     lookup_field = "id"
+    # todo = queryset.get(id = id)
+
+    # if todo.deleted == True:
+    #     print("HElllo")
+    #     todo.restore()  
+
+
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+      
+
 
 
 class TodoDeleteApi(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
     queryset = Todo.objects.filter(deleted = False)
+    lookup_field = "id"
 
     def delete(self, request, id):
         todo = self.queryset.get(id=id)

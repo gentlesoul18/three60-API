@@ -36,6 +36,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
 
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
         serializer.save()
         user_data = serializer.data
         user = User.objects.get(email=user_data["email"])
@@ -56,7 +57,7 @@ class LoginView(GenericAPIView):
         username = request.data["username"]
         password = request.data["password"]
         try:
-            user = User.objects.get(Q(username=username) | Q(email=username))
+            user = User.objects.get(Q(username=username.lower()) | Q(email=username))
         except BaseException as e:
             raise ValidationError({"message": "This user does not exist"})
 
@@ -81,24 +82,15 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     The code is used to generate users access token then the access token,
     the access token is then used to generate the user's data from google
     """
-
     
     serializer_class = InputSerializer
 
-    schema = ManualSchema(
-        description="User register endpoint.",
-        fields=[
-            
-        ]
-    )
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT, 
         properties={
             'code': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
         }
     ))
-    
-
     
 
     def post(self, request):
@@ -119,7 +111,7 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
 
         response = Response()
         token = jwt_login(response=response, user=user)
-        response.data = {"access token": token, **profile_data}
+        response.data = {"access_token": token, **profile_data}
         
 
         return response
