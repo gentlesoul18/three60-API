@@ -16,6 +16,10 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 load_dotenv()
 
@@ -27,10 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG")
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = [
     '*',
@@ -214,8 +218,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-GMAIL_API_CLIENT_ID = config("CLIENT_IID")
-GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
+GMAIL_API_CLIENT_ID = env("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = '1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao'
 
 
