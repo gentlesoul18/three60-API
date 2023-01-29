@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.generics import (
     ListAPIView,
@@ -89,13 +88,6 @@ class TodoUpdateApi(UpdateAPIView):
         IsOwner
     )
     lookup_field = "id"
-    # todo = queryset.get(id = id)
-
-    # if todo.deleted == True:
-    #     print("HElllo")
-    #     todo.restore()  
-
-
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)

@@ -1,15 +1,11 @@
 from django.db.models import Q
-
 from rest_framework.generics import GenericAPIView
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework import  serializers, status
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
 from three60.mixins import ApiErrorsMixin, ApiAuthMixin, PublicApiMixin
-
 from authentication.services import (
     user_get_or_create,
     google_get_user_info,
@@ -17,9 +13,6 @@ from authentication.services import (
 )
 from authentication.serializers import UserSerializer, RegisterSerializer, InputSerializer
 from authentication.models import User
-import coreapi
-import coreschema
-from rest_framework.schemas import ManualSchema
 
 
 # Create your views here.

@@ -5,7 +5,9 @@ from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.
-class Status(models.Model):
+
+
+class Todo(models.Model):
     BACKLOG = "Backlog"
     IN_PROGRESS = "In Progress"
     FINISHED = "Finished"
@@ -18,15 +20,13 @@ class Status(models.Model):
         (OVER_DUE, "Over Due"),
         (TRASH, "Trash"),
     ]
-    status = status = models.CharField(
-        max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG
-    )
-
-class Todo(models.Model):
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
-    status = models.OneToOneField(Status, on_delete= models.CASCADE)
+    status = status = models.CharField(
+        max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)

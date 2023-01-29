@@ -6,12 +6,8 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 class User(AbstractUser):
     is_verified = models.BooleanField(default=False)
-
-
-    
     
     REQUIRED_FIELDS = []
     def tokens(self):
-        refresh = RefreshToken.for_user(self)
         access = AccessToken.for_user(self)
         return str(access)
