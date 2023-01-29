@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.generics import (
     ListAPIView,
@@ -29,7 +28,7 @@ def status_count(request):
 
     return Response(
         {
-            "backlog": backlog,
+            "backlog": backlog, 
             "in progress": inprogress,
             "finished": finished,
             "over due": overdue,
@@ -70,7 +69,7 @@ class TodoDetailApi(RetrieveAPIView):
     queryset = Todo.objects.filter(deleted = False)
     permission_classes = (
         permissions.IsAuthenticated,
-        IsOwner,
+        IsOwner
     )
     lookup_field = "id"
 
@@ -86,7 +85,7 @@ class TodoUpdateApi(UpdateAPIView):
     queryset = Todo.objects.all()
     permission_classes = (
         permissions.IsAuthenticated,
-        IsOwner,
+        IsOwner
     )
     lookup_field = "id"
 
@@ -95,11 +94,14 @@ class TodoUpdateApi(UpdateAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+      
+
 
 
 class TodoDeleteApi(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
     queryset = Todo.objects.filter(deleted = False)
+    lookup_field = "id"
 
     def delete(self, request, id):
         todo = self.queryset.get(id=id)

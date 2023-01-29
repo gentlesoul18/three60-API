@@ -20,11 +20,11 @@ class Todo(models.Model):
         (OVER_DUE, "Over Due"),
         (TRASH, "Trash"),
     ]
-
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
-    status = models.CharField(
+    status = status = models.CharField(
         max_length=20, choices=TODO_STATUS_CHOICES, default=BACKLOG
     )
     created = models.DateTimeField(auto_now_add=True)

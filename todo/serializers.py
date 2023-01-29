@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db.models import Count, Q
 from .models import Todo
 
 
