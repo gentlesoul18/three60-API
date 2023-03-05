@@ -14,11 +14,11 @@ GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
 
 
 def jwt_login(*, response: HttpResponse, user: User) -> HttpResponse:
-    token = user.tokens()  # generates access token to authenticate user that logs in with google
+    token = (
+        user.tokens()
+    )  # generates access token to authenticate user that logs in with google
 
     return token
-
-
 
 
 def google_get_user_info(access_token: str):  # -> Dict[str, Any]

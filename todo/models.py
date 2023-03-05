@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 
-
 User = settings.AUTH_USER_MODEL
 # Create your models here.
 
@@ -20,7 +19,7 @@ class Todo(models.Model):
         (OVER_DUE, "Over Due"),
         (TRASH, "Trash"),
     ]
-    
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
@@ -30,7 +29,6 @@ class Todo(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
-    
 
     def hide(self):
         self.deleted = True
