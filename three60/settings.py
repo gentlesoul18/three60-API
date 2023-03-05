@@ -16,6 +16,10 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 load_dotenv()
 
@@ -27,10 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = [
     '*',
@@ -40,7 +44,7 @@ ALLOWED_HOSTS = [
     "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
-SITE_ID = 3
+SITE_ID = 2
 
 
 # Application definition
@@ -179,7 +183,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
+APPEND_SLASH =False
+REMOVE_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -199,7 +204,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-        # 'rest_framework.authentication.SessionAuthentication',
         "rest_framework.authentication.BasicAuthentication",
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -214,8 +218,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-GMAIL_API_CLIENT_ID = config("CLIENT_IID")
-GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
+GMAIL_API_CLIENT_ID = env("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = '1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao'
 
 
@@ -259,3 +263,17 @@ SOCIALACCOUNT_PROVIDERS = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 BASE_FRONTEND_URL = "localhost:3000"
+
+
+
+# if ENVIRONMENT == 'production':
+#     DEBUG = False
+#     SECRET_KEY = os.getenv('SECRET_KEY')
+#     SESSION_COOKIE_SECURE = True
+#     SECURE_BROWSER_XSS_FILTER = True
+#     SECURE_CONTENT_TYPE_NOSNIFF = True
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_SECONDS = 31536000
+#     SECURE_REDIRECT_EXEMPT = []
+#     SECURE_SSL_REDIRECT = True
+#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
