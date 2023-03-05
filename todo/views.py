@@ -18,23 +18,47 @@ from .permissions import IsOwner
 
 @api_view(http_method_names=["GET"])
 def status_count(request):
-    backlog = Todo.objects.filter(status="Backlog").filter(user=request.user).count()
-    inprogress = (
-        Todo.objects.filter(status="In Progress").filter(user=request.user).count()
-    )
-    finished = Todo.objects.filter(status="Finished").filter(user=request.user).count()
-    overdue = Todo.objects.filter(status="Over Due").filter(user=request.user).count()
-    trash = Todo.objects.filter(status="Trash").filter(user=request.user).count()
+    todos = Todo.objects.filter(deleted = False)
+    backlog = todos.filter(status="Backlog").filter(user=request.user).count()
+    inprogress =todos.filter(status="In Progress").filter(user=request.user).count()
 
-    return Response(
+    finished = todos.filter(status="Finished").filter(user=request.user).count()
+    overdue = todos.filter(status="Over Due").filter(user=request.user).count()
+    trash =Todo.objects.filter(status="Trash").filter(user=request.user).count()
+
+    todo_counts =[ 
         {
-            "backlog": backlog, 
-            "in progress": inprogress,
-            "finished": finished,
-            "over due": overdue,
-            "trash": trash,
-        }
-    )
+            'id':1,
+            'title':"All Todos",
+            'value':todos.filter(user=request.user).count()
+            },
+        {
+            'id':2,
+            'title':"Backlog",
+            'value':backlog
+            }, 
+        {
+            'id':3,
+            'title':"In Progress",
+            'value':inprogress
+            },
+        {
+            'id':4,
+            'title':"Finished",
+            'value':finished
+            },
+        {
+            'id':5,
+            'title':"Over Due",
+            'value':overdue
+            },
+        {
+            'id':6,
+            'title':"Trash",
+            'value':trash
+            },
+    ]
+    return Response(todo_counts)
 
 
 class TodoListApi(ListAPIView):
