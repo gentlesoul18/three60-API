@@ -18,45 +18,25 @@ from .permissions import IsOwner
 
 @api_view(http_method_names=["GET"])
 def status_count(request):
-    todos = Todo.objects.filter(deleted = False)
+    todos = Todo.objects.filter(deleted=False)
     backlog = todos.filter(status="Backlog").filter(user=request.user).count()
-    inprogress =todos.filter(status="In Progress").filter(user=request.user).count()
+    inprogress = todos.filter(status="In Progress").filter(user=request.user).count()
 
     finished = todos.filter(status="Finished").filter(user=request.user).count()
     overdue = todos.filter(status="Over Due").filter(user=request.user).count()
-    trash =Todo.objects.filter(status="Trash").filter(user=request.user).count()
+    trash = Todo.objects.filter(status="Trash").filter(user=request.user).count()
 
-    todo_counts =[ 
+    todo_counts = [
         {
-            'id':1,
-            'title':"All Todos",
-            'value':todos.filter(user=request.user).count()
-            },
-        {
-            'id':2,
-            'title':"Backlog",
-            'value':backlog
-            }, 
-        {
-            'id':3,
-            'title':"In Progress",
-            'value':inprogress
-            },
-        {
-            'id':4,
-            'title':"Finished",
-            'value':finished
-            },
-        {
-            'id':5,
-            'title':"Over Due",
-            'value':overdue
-            },
-        {
-            'id':6,
-            'title':"Trash",
-            'value':trash
-            },
+            "id": 1,
+            "title": "All Todos",
+            "value": todos.filter(user=request.user).count(),
+        },
+        {"id": 2, "title": "Backlog", "value": backlog},
+        {"id": 3, "title": "In Progress", "value": inprogress},
+        {"id": 4, "title": "Finished", "value": finished},
+        {"id": 5, "title": "Over Due", "value": overdue},
+        {"id": 6, "title": "Trash", "value": trash},
     ]
     return Response(todo_counts)
 
@@ -67,7 +47,7 @@ class TodoListApi(ListAPIView):
         permissions.IsAuthenticated,
         IsOwner,
     )
-    queryset = Todo.objects.filter(deleted = False)
+    queryset = Todo.objects.filter(deleted=False)
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -90,11 +70,8 @@ class TodoCreateApi(CreateAPIView):
 
 class TodoDetailApi(RetrieveAPIView):
     serializer_class = TodoSerializer
-    queryset = Todo.objects.filter(deleted = False)
-    permission_classes = (
-        permissions.IsAuthenticated,
-        IsOwner
-    )
+    queryset = Todo.objects.filter(deleted=False)
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
     lookup_field = "id"
 
     def perform_create(self, serializer):
@@ -107,10 +84,7 @@ class TodoDetailApi(RetrieveAPIView):
 class TodoUpdateApi(UpdateAPIView):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
-    permission_classes = (
-        permissions.IsAuthenticated,
-        IsOwner
-    )
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
     lookup_field = "id"
 
     def perform_create(self, serializer):
@@ -118,13 +92,11 @@ class TodoUpdateApi(UpdateAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-      
-
 
 
 class TodoDeleteApi(APIView):
     permission_classes = (permissions.IsAuthenticated, IsOwner)
-    queryset = Todo.objects.filter(deleted = False)
+    queryset = Todo.objects.filter(deleted=False)
     lookup_field = "id"
 
     def delete(self, request, id):

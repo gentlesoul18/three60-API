@@ -11,7 +11,11 @@ from authentication.services import (
     google_get_user_info,
     jwt_login,
 )
-from authentication.serializers import UserSerializer, RegisterSerializer, InputSerializer
+from authentication.serializers import (
+    UserSerializer,
+    RegisterSerializer,
+    InputSerializer,
+)
 from authentication.models import User
 
 
@@ -29,7 +33,7 @@ class RegisterView(GenericAPIView, ApiAuthMixin):
 
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         serializer.save()
         user_data = serializer.data
         user = User.objects.get(email=user_data["email"])
@@ -75,20 +79,20 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
     The code is used to generate users access token then the access token,
     the access token is then used to generate the user's data from google
     """
-    
+
     serializer_class = InputSerializer
 
-    @swagger_auto_schema(request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT, 
-        properties={
-            'code': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
-        }
-    ))
-    
-
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "code": openapi.Schema(type=openapi.TYPE_STRING, description="string"),
+            },
+        )
+    )
     def post(self, request):
 
-        code = request.data['code']
+        code = request.data["code"]
 
         user_data = google_get_user_info(access_token=code)
 
@@ -105,6 +109,5 @@ class GoogleLoginApi(PublicApiMixin, ApiErrorsMixin, APIView):
         response = Response()
         token = jwt_login(response=response, user=user)
         response.data = {"access_token": token, **profile_data}
-        
 
         return response
