@@ -57,3 +57,18 @@ def get_error_message(exc) -> str:
         error_msg = str(exc)
 
     return error_msg
+
+
+def status_changer(status):
+    if status == "1":
+        return 'Backlog'
+    elif status == "2":
+        return 'In Progress'
+    elif status == "3":
+        return 'Finished'
+    elif status == "4":
+        return 'Over Due'
+    elif status=="5":
+        return 'Trash'
+    else:
+        return {'message': 'Id doesnt exist'} 
