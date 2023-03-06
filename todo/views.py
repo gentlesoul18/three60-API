@@ -66,13 +66,13 @@ class TodoCreateApi(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         status = request.data["status"]
-        new_status = status_changer(status)
+        new_status = status_changer(str(status))
 
         serializer = TodoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data["status"] = new_status
         serializer.save(user=self.request.user)
-        
+
         return Response(serializer.data)
 
     def get_queryset(self):
@@ -95,21 +95,21 @@ class TodoDetailApi(RetrieveAPIView):
 class TodoUpdateApi(GenericAPIView):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
-    permission_classes = (permissions.IsAuthenticated, IsOwner)
+    # permission_classes = (permissions.IsAuthenticated, IsOwner)
     lookup_field = "id"
-   
-    def put(self, request, id):
-        obj = self.queryset.get(id = id)
-        status = request.data["status"]
-        new_status = status_changer(status)
 
+    def put(self, request, id):
+        obj = self.queryset.get(id=id)
+        status = request.data["status"]
+        print(status)
+        new_status = status_changer(str(status))
+        print(new_status)
         serializer = TodoSerializer(instance=obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data["status"] = new_status
         serializer.save(user=self.request.user)
 
         return Response(serializer.data)
-    
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
