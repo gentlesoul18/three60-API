@@ -33,8 +33,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = env("SECRET_KEY")
-# SECRET_KEY = os.environ.get("SECRET_KEY")
-SECRET_KEY = "django-insecure-ud81n^1+5c9c_hx&e49x3wbel2nx=%j3nj6dq=)-+445z8ax12"
+
+SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -215,10 +215,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-# GMAIL_API_CLIENT_ID = env("CLIENT_IID")
-GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
-# GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
-GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+GMAIL_API_CLIENT_ID = env("CLIENT_IID")
+# GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
+GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
+# GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = "1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao"
 
 
@@ -262,16 +262,3 @@ SOCIALACCOUNT_PROVIDERS = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 BASE_FRONTEND_URL = "localhost:3000"
-
-
-# if ENVIRONMENT == 'production':
-#     DEBUG = False
-#     SECRET_KEY = os.getenv('SECRET_KEY')
-#     SESSION_COOKIE_SECURE = True
-#     SECURE_BROWSER_XSS_FILTER = True
-#     SECURE_CONTENT_TYPE_NOSNIFF = True
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#     SECURE_HSTS_SECONDS = 31536000
-#     SECURE_REDIRECT_EXEMPT = []
-#     SECURE_SSL_REDIRECT = True
-#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

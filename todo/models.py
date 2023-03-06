@@ -30,7 +30,7 @@ class Todo(models.Model):
     updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
 
-    def hide(self):
+    def delete(self):
         self.deleted = True
         self.status = "Trash"
         self.save()
