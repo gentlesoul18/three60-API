@@ -17,6 +17,7 @@ from datetime import timedelta
 import dj_database_url
 import os
 import environ
+
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env()
@@ -31,13 +32,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+# SECRET_KEY = env("SECRET_KEY")
 
+SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    "*",
     "localhost",
     "0.0.0.0",
     "https://three60-api.herokuapp.com",
@@ -57,23 +59,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    #Third party apps
+    # Third party apps
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "gmailapi_backend",
     "drf_yasg",
-
-    #all_auth apps
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
-
-    #Local apps
+    # all_auth apps
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
+    "allauth.socialaccount.providers.twitter",
+    # Local apps
     "authentication",
     "todo",
 ]
@@ -103,7 +102,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'django.template.context_processors.request',
+                "django.template.context_processors.request",
             ],
         },
     },
@@ -144,13 +143,13 @@ AUTH_USER_MODEL = "authentication.User"
 #         "HOST": "localhost",
 #         "PORT": "5432",
 #     }
-#}
+# }
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -183,7 +182,7 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-APPEND_SLASH =False
+APPEND_SLASH = False
 REMOVE_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
@@ -198,16 +197,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
 }
 
 REST_USE_JWT = True
@@ -219,8 +216,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 GMAIL_API_CLIENT_ID = env("CLIENT_IID")
+# GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
 GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
-GMAIL_API_REFRESH_TOKEN = '1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao'
+# GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+GMAIL_API_REFRESH_TOKEN = "1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao"
 
 
 SIMPLE_JWT = {
@@ -253,9 +252,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "profile",
             "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'offline',
-        }
+        "AUTH_PARAMS": {
+            "access_type": "offline",
+        },
     }
 }
 
@@ -263,17 +262,3 @@ SOCIALACCOUNT_PROVIDERS = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 BASE_FRONTEND_URL = "localhost:3000"
-
-
-
-# if ENVIRONMENT == 'production':
-#     DEBUG = False
-#     SECRET_KEY = os.getenv('SECRET_KEY')
-#     SESSION_COOKIE_SECURE = True
-#     SECURE_BROWSER_XSS_FILTER = True
-#     SECURE_CONTENT_TYPE_NOSNIFF = True
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#     SECURE_HSTS_SECONDS = 31536000
-#     SECURE_REDIRECT_EXEMPT = []
-#     SECURE_SSL_REDIRECT = True
-#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

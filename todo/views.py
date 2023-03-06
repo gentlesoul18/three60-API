@@ -1,14 +1,15 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import (
+    GenericAPIView,
     ListAPIView,
     CreateAPIView,
-    UpdateAPIView,
     RetrieveAPIView,
 )
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions, status
 
+from three60.utils import status_changer
 from .models import Todo
 from .serializers import TodoSerializer
 from .permissions import IsOwner
@@ -17,6 +18,7 @@ from .permissions import IsOwner
 
 
 @api_view(http_method_names=["GET"])
+@permission_classes((permissions.IsAuthenticated, IsOwner))
 def status_count(request):
     todos = Todo.objects.filter(deleted=False)
     backlog = todos.filter(status="Backlog").filter(user=request.user).count()
@@ -61,8 +63,16 @@ class TodoCreateApi(CreateAPIView):
         IsOwner,
     )
 
-    def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
+    def create(self, request, *args, **kwargs):
+        status = request.data["status"]
+        new_status = status_changer(str(status))
+
+        serializer = TodoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.validated_data["status"] = new_status
+        serializer.save(user=self.request.user)
+
+        return Response(serializer.data)
 
     def get_queryset(self):
         todo = self.queryset.filter(user=self.request.user)
@@ -81,14 +91,37 @@ class TodoDetailApi(RetrieveAPIView):
         return self.queryset.filter(user=self.request.user)
 
 
-class TodoUpdateApi(UpdateAPIView):
+class TodoUpdateApi(GenericAPIView):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
     permission_classes = (permissions.IsAuthenticated, IsOwner)
     lookup_field = "id"
 
-    def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
+    def put(self, request, id):
+        obj = self.queryset.get(id=id)
+        status = request.data["status"]
+        print(status)
+        new_status = status_changer(str(status))
+        print(new_status)
+        serializer = TodoSerializer(instance=obj, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.validated_data["status"] = new_status
+        serializer.save(user=self.request.user)
+
+        return Response(serializer.data)
+    
+    def patch(self, request, id):
+        obj = self.queryset.get(id=id)
+        status = request.data["status"]
+        print(status)
+        new_status = status_changer(str(status))
+        print(new_status)
+        serializer = TodoSerializer(instance=obj, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.validated_data["status"] = new_status
+        serializer.save(user=self.request.user)
+
+        return Response(serializer.data)
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -101,5 +134,5 @@ class TodoDeleteApi(APIView):
 
     def delete(self, request, id):
         todo = self.queryset.get(id=id)
-        todo.hide()
+        todo.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
