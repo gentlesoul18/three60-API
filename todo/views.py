@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
@@ -17,6 +17,7 @@ from .permissions import IsOwner
 
 
 @api_view(http_method_names=["GET"])
+@permission_classes((permissions.IsAuthenticated, IsOwner))
 def status_count(request):
     todos = Todo.objects.filter(deleted=False)
     backlog = todos.filter(status="Backlog").filter(user=request.user).count()
