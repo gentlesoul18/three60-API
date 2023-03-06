@@ -16,26 +16,25 @@ from decouple import config
 from datetime import timedelta
 import dj_database_url
 import os
-import environ
 
 # Initialise environment variables
-env = environ.Env()
+# env = environ.Env()
 
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_path = os.path.join(BASE_DIR, '.env')
-environ.Env.read_env('.env')
+# env_patead_env('.env')
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+# See https:h = os.path.join(BASE_DIR, '.env')
+# environ.Env.r//docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = env("SECRET_KEY")
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -216,10 +215,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://pypi.org/project/django-gmailapi-backend/ (documentation)
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
-GMAIL_API_CLIENT_ID = env("CLIENT_IID")
-# GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
-GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
-# GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+# GMAIL_API_CLIENT_ID = env("CLIENT_IID")
+GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
+# GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
+GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = "1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao"
 
 
