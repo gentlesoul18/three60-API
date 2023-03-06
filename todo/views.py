@@ -29,13 +29,13 @@ def status_count(request):
     todo_counts = [
         {
             "id": 1,
-            "title": "All Todos",
+            "title": "All-Todos",
             "value": todos.filter(user=request.user).count(),
         },
         {"id": 2, "title": "Backlog", "value": backlog},
-        {"id": 3, "title": "In Progress", "value": inprogress},
+        {"id": 3, "title": "In-Progress", "value": inprogress},
         {"id": 4, "title": "Finished", "value": finished},
-        {"id": 5, "title": "Over Due", "value": overdue},
+        {"id": 5, "title": "Over-Due", "value": overdue},
         {"id": 6, "title": "Trash", "value": trash},
     ]
     return Response(todo_counts)
