@@ -3,7 +3,6 @@ from rest_framework.generics import (
     GenericAPIView,
     ListAPIView,
     CreateAPIView,
-    UpdateAPIView,
     RetrieveAPIView,
 )
 from rest_framework.response import Response
@@ -95,10 +94,23 @@ class TodoDetailApi(RetrieveAPIView):
 class TodoUpdateApi(GenericAPIView):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
-    # permission_classes = (permissions.IsAuthenticated, IsOwner)
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
     lookup_field = "id"
 
     def put(self, request, id):
+        obj = self.queryset.get(id=id)
+        status = request.data["status"]
+        print(status)
+        new_status = status_changer(str(status))
+        print(new_status)
+        serializer = TodoSerializer(instance=obj, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.validated_data["status"] = new_status
+        serializer.save(user=self.request.user)
+
+        return Response(serializer.data)
+    
+    def patch(self, request, id):
         obj = self.queryset.get(id=id)
         status = request.data["status"]
         print(status)
@@ -122,5 +134,5 @@ class TodoDeleteApi(APIView):
 
     def delete(self, request, id):
         todo = self.queryset.get(id=id)
-        todo.hide()
+        todo.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
