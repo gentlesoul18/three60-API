@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = env("SECRET_KEY")
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -153,6 +153,9 @@ DATABASES = {
     }
 }
 
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -216,7 +219,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 # GMAIL_API_CLIENT_ID = env("CLIENT_IID")
-GMAIL_API_CLIENT_ID =os.environ.get("CLIENT_IID")
+GMAIL_API_CLIENT_ID = os.environ.get("CLIENT_IID")
 # GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
 GMAIL_API_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 GMAIL_API_REFRESH_TOKEN = "1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao"
