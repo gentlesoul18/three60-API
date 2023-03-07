@@ -48,7 +48,7 @@ ALLOWED_HOSTS = [
     "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
-SITE_ID = 2
+SITE_ID = 3
 
 
 # Application definition
