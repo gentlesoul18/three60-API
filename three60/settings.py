@@ -36,7 +36,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = env("SECRET_KEY")
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-print("Secret Key =",SECRET_KEY)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -133,10 +133,23 @@ WSGI_APPLICATION = "three60.wsgi.application"
 # Custom user model
 AUTH_USER_MODEL = "authentication.User"
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("USER"),
+        "USER": "postgres",
+        "PASSWORD": os.environ.get("PASSWORD"),
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
