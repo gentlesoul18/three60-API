@@ -33,7 +33,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # environ.Env.r//docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env("SECRET_KEY")
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
@@ -45,6 +44,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "https://three60-api.herokuapp.com",
+    "https://three60-api.up.railway.app/",
     "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
