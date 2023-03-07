@@ -15,8 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from drf_yasg.generators import OpenAPISchemaGenerator
+
+class BothHttpAndHttpsSchemaGenerator(OpenAPISchemaGenerator):
+    def get_schema(self, request=None, public=False):
+        schema = super().get_schema(request, public)
+        schema.schemes = ["http", "https"]
+        return schema
 
 
 schema_view = get_schema_view(
@@ -25,6 +33,8 @@ schema_view = get_schema_view(
         default_version='1.0.0',
         description="API documentation of three60",
     ),
+    generator_class=BothHttpAndHttpsSchemaGenerator, # Here
+    permission_classes=(AllowAny,),
     public=True,
 )
 
