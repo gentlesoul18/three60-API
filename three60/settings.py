@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = env("SECRET_KEY")
 
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = "django-insecure-ud81n^1+5c9c_hx&e49x3wbel2nx=%j3nj6dq=)-+445z8ax12"
 print("Secret Key =",SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -203,9 +203,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 # GMAIL_API_CLIENT_ID = env("CLIENT_IID")
-GMAIL_API_CLIENT_ID =config("CLIENT_IID")
+GMAIL_API_CLIENT_ID ="335239736987-10c3pogthhojtu2t720kc3lu4e9k6tba.apps.googleusercontent.com"
 # GMAIL_API_CLIENT_SECRET = env("CLIENT_SECRET")
-GMAIL_API_CLIENT_SECRET = config("CLIENT_SECRET")
+GMAIL_API_CLIENT_SECRET = "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"
 GMAIL_API_REFRESH_TOKEN = "1//04hJB9E6bLarQCgYIARAAGAQSNwF-L9IrmpAPd6TnqSzUsh2Dh6rZ0dB2J1CqImYgv1FfndxXnwfKZgMjW01VE6t6e7g5b42Y4ao"
 
 
