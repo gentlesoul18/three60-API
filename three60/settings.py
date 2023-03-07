@@ -148,8 +148,8 @@ DATABASES = {
         "NAME": os.environ.get("USER"),
         "USER": "postgres",
         "PASSWORD": os.environ.get("PASSWORD"),
-        "HOST": "localhost",
-        "PORT": "5432",
+        "HOST": "containers-us-west-54.railway.app",
+        "PORT": "7408",
     }
 }
 
