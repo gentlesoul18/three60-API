@@ -48,7 +48,7 @@ ALLOWED_HOSTS = [
     "https://three60-api-gentlesoul18.koyeb.app",
 ]
 
-SITE_ID = 3
+SITE_ID = 4
 
 
 # Application definition
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party apps
     "rest_framework",
+    "corsheaders",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "gmailapi_backend",
