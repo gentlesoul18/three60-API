@@ -33,7 +33,7 @@ schema_view = get_schema_view(
         default_version='1.0.0',
         description="API documentation of three60",
     ),
-    generator_class=BothHttpAndHttpsSchemaGenerator, # Here
+    schemes=['https',http'], # Here
     permission_classes=(AllowAny,),
     public=True,
 )
