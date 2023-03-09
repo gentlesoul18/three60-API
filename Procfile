@@ -1,1 +1,1 @@
-web: gunicorn three60.wsgi:application
+web: gunicorn three60.wsgi
