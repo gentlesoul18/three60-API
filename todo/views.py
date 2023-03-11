@@ -95,27 +95,21 @@ class TodoUpdateApi(GenericAPIView):
     def put(self, request, id):
         obj = self.queryset.get(id=id)
         status = request.data["status"]
-        print(status)
         new_status = status_changer(str(status))
-        print(new_status)
         serializer = TodoSerializer(instance=obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data["status"] = new_status
         serializer.save(user=self.request.user)
-
         return Response(serializer.data)
     
     def patch(self, request, id):
         obj = self.queryset.get(id=id)
         status = request.data["status"]
-        print(status)
         new_status = status_changer(str(status))
-        print(new_status)
         serializer = TodoSerializer(instance=obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data["status"] = new_status
         serializer.save(user=self.request.user)
-
         return Response(serializer.data)
 
     def get_queryset(self):
