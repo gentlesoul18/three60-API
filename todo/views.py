@@ -11,7 +11,7 @@ from rest_framework import permissions, status
 
 from three60.utils import status_changer
 from .models import Todo
-from .serializers import TodoSerializer
+from .serializers import TodoSerializer, CreateTodoSerializer
 from .permissions import IsOwner
 
 # Create your views here.
@@ -56,20 +56,17 @@ class TodoListApi(ListAPIView):
 
 
 class TodoCreateApi(CreateAPIView):
-    serializer_class = TodoSerializer
+    serializer_class = CreateTodoSerializer
     queryset = Todo.objects.all()
     permission_classes = (
         permissions.IsAuthenticated,
         IsOwner,
     )
 
-    def create(self, request, *args, **kwargs):
-        status = request.data["status"]
-
-        serializer = TodoSerializer(data=request.data)
+    def create(self, request):
+        serializer = CreateTodoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=self.request.user)
-
         return Response(serializer.data)
 
     def get_queryset(self):
