@@ -65,11 +65,9 @@ class TodoCreateApi(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         status = request.data["status"]
-        new_status = status_changer(str(status))
 
         serializer = TodoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.validated_data["status"] = new_status
         serializer.save(user=self.request.user)
 
         return Response(serializer.data)
