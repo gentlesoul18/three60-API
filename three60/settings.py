@@ -17,6 +17,7 @@ from datetime import timedelta
 import dj_database_url
 import os
 import environ
+import django_heroku
 
 # Initialise environment variables
 env = environ.Env()
@@ -276,3 +277,4 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 BASE_FRONTEND_URL = "localhost:3000"
 
 
+django_heroku.settings(locals())
