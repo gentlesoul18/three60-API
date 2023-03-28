@@ -22,10 +22,9 @@ from .permissions import IsOwner
 def status_count(request):
     todos = Todo.objects.filter(deleted=False)
     backlog = todos.filter(status="Backlog").filter(user=request.user).count()
-    inprogress = todos.filter(status="In Progress").filter(user=request.user).count()
-
+    inprogress = todos.filter(status="In-Progress").filter(user=request.user).count()
     finished = todos.filter(status="Finished").filter(user=request.user).count()
-    overdue = todos.filter(status="Over Due").filter(user=request.user).count()
+    overdue = todos.filter(status="Over-Due").filter(user=request.user).count()
     trash = Todo.objects.filter(status="Trash").filter(user=request.user).count()
 
     todo_counts = [

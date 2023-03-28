@@ -11,6 +11,7 @@ class CreateTodoSerializer(serializers.ModelSerializer):
         
 
 class TodoSerializer(serializers.ModelSerializer):
+    status = serializers.CharField()
     class Meta:
         model = Todo
         fields = ["id", "title", "description", "status", "created", "updated"]

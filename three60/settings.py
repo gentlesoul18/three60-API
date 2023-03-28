@@ -149,8 +149,8 @@ DATABASES = {
         "NAME": os.environ.get("USER"),
         "USER": "postgres",
         "PASSWORD": os.environ.get("PASSWORD"),
-        "HOST": "containers-us-west-54.railway.app",
-        "PORT": "7408",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -212,7 +212,7 @@ REST_FRAMEWORK = {
 }
 
 REST_USE_JWT = True
-
+# os.environ['HTTPS'] = "on"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # email backend used with gmailapi package
@@ -263,6 +263,16 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 
+CORS_ALLOWED_ORIGINS = (
+"http://localhost:3000",
+"http://localhost:8000",
+)
+
 CORS_ORIGIN_ALLOW_ALL = True
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 BASE_FRONTEND_URL = "localhost:3000"
+
+
